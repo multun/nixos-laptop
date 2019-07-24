@@ -21,7 +21,17 @@
     }
   ];
 
+  # power management stuff
+  boot.extraModprobeConfig = "options snd_hda_intel power_save=1";
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "ondemand";
+    powertop.enable = true;
+  };
+
   hardware.acpilight.enable = true;
+
+  # networking stuff
   networking.hostName = "thinkingbus";
   networking.wireless.enable = true;
 
@@ -41,7 +51,7 @@
     mtr
     font-awesome
   ]);
-  
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
