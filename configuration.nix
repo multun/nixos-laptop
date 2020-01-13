@@ -81,6 +81,9 @@
   programs.ssh.startAgent = true;
   programs.ssh.agentTimeout = "1h";
 
+  programs.wireshark.enable = true;
+  programs.wireshark.package = pkgs.wireshark-qt;
+
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
   # List services that you want to enable:
@@ -119,7 +122,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "docker" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "docker" "wireshark" ];
     group = "users";
     createHome = true;
     home = "/home/multun";
