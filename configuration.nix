@@ -77,6 +77,10 @@
 
   virtualisation.docker.enable = true;
 
+  # enable ssh-agent
+  programs.ssh.startAgent = true;
+  programs.ssh.agentTimeout = "1h";
+
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
   # List services that you want to enable:
