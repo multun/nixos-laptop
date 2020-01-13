@@ -75,6 +75,8 @@
 
   programs.dconf.enable = true;
 
+  virtualisation.docker.enable = true;
+
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
   # List services that you want to enable:
@@ -113,7 +115,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "docker" ];
     group = "users";
     createHome = true;
     home = "/home/multun";
