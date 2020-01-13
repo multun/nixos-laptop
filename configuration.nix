@@ -40,6 +40,7 @@
 
   environment.systemPackages = (with pkgs; [
     git
+    openssh
     procps-ng
     nix-prefetch-scripts
     emacs
