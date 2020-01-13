@@ -111,14 +111,15 @@
     xkbOptions = "oss";
     libinput.enable = true;
     libinput.disableWhileTyping = true;
-    desktopManager.default = "none";
     desktopManager.xterm.enable = false;
-    windowManager.default = "i3";
     windowManager.i3 = {
       enable = true;
       package = pkgs.i3-gaps;
     };
   };
+
+  services.xserver.displayManager.defaultSession = "none+i3";
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
