@@ -39,7 +39,6 @@
   networking.wireless.enable = true;
 
   environment.systemPackages = (with pkgs; [
-    firefox
     git
     procps-ng
     nix-prefetch-scripts
