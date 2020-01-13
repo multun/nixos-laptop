@@ -29,6 +29,9 @@
     powertop.enable = true;
   };
 
+  # fix loading of terminus / other bitmap fonts
+  fonts.fontconfig.useEmbeddedBitmaps = true;
+
   hardware.acpilight.enable = true;
 
   # networking stuff
