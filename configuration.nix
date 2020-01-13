@@ -122,10 +122,19 @@
 
   xdg.portal.enable = false;
 
+  hardware.sane.enable = true;
+  services.udev = {
+    extraRules = ''
+      # Canon CanoScan Lide 120
+      ATTRS{idVendor}=="04a9", ATTRS{idProduct}=="190e", ENV{libsane_matched}="yes"
+    '';
+  };
+
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "docker" "wireshark" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "docker" "wireshark" "scanner" ];
     group = "users";
     createHome = true;
     home = "/home/multun";
