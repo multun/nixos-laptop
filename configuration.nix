@@ -72,9 +72,11 @@
   # started in user sessions.
   programs.mtr.enable = true;
 
+  programs.adb.enable = true;
+
   programs.dconf.enable = true;
 
-  virtualisation.docker.enable = true;
+  # virtualisation.docker.enable = true;
 
   # enable ssh-agent
   programs.ssh.startAgent = true;
@@ -133,7 +135,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "docker" "wireshark" "scanner" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "wireshark" "scanner" "adbusers" ];
     group = "users";
     createHome = true;
     home = "/home/multun";
