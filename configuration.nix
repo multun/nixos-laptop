@@ -13,30 +13,55 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.memtest86.enable = true;
+
   boot.initrd.luks.devices = {
     root = {
-      device = "/dev/disk/by-uuid/8bdb6677-bb46-4215-8ab7-ecc6301e89da";
+      device = "/dev/disk/by-uuid/553cb8ac-0b2f-4d7c-aa46-4582ac0deacf";
       preLVM = true;
     };
   };
 
-  # power management stuff
-  boot.extraModprobeConfig = "options snd_hda_intel power_save=1";
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.extraModulePackages = [ pkgs.linuxPackages_latest.v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" ];
+  boot.extraModprobeConfig = ''
+    options snd_hda_intel power_save=1
+  '';
+
   powerManagement = {
     enable = true;
     cpuFreqGovernor = "ondemand";
     powertop.enable = true;
   };
 
+  networking.hostName = "thinkingbus";
+  networking.wireless.enable = true;
+
+
   # fix loading of terminus / other bitmap fonts
   fonts.fontconfig.useEmbeddedBitmaps = true;
 
   hardware.acpilight.enable = true;
 
-  # networking stuff
-  networking.hostName = "thinkingbus";
-  networking.wireless.enable = true;
+  # weird intel stuff
+#  nixpkgs.config.packageOverrides = pkgs: {
+#    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+#  };
 
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # LIBVA_DRIVER_NAME=iHD
+      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
+
+  environment.enableDebugInfo = true;
   environment.systemPackages = (with pkgs; [
     git
     openssh
@@ -52,20 +77,16 @@
     tcpdump
     mtr
     font-awesome
+    v4l-utils
   ]);
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
     keyMap = "fr";
   };
-  i18n.defaultLocale = "en_US.UTF-8";
 
-  # Set your time zone.
+
   time.timeZone = "Europe/Paris";
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -85,17 +106,15 @@
   programs.wireshark.enable = true;
   programs.wireshark.package = pkgs.wireshark-qt;
 
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  #   pinentryFlavor = "gnome3";
+  # };
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
   # Enable CUPS to print documents.
@@ -107,6 +126,7 @@
 
   # Enable i3 Desktop Environment.
   services.xserver = {
+    wacom.enable = true;
     enable = true;
     layout = "fr";
     xkbOptions = "oss";
@@ -128,24 +148,27 @@
     extraRules = ''
       # Canon CanoScan Lide 120
       ATTRS{idVendor}=="04a9", ATTRS{idProduct}=="190e", ENV{libsane_matched}="yes"
+      # Rule for the Ergodox EZ
+      SUBSYSTEM=="usb", ATTR{idVendor}=="feed", ATTR{idProduct}=="1307", GROUP="plugdev"
     '';
   };
-
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "wireshark" "scanner" "adbusers" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "wireshark" "scanner" "adbusers" "plugdev" "docker" ];
     group = "users";
     createHome = true;
     home = "/home/multun";
     uid = 1000;
   };
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "19.03"; # Did you read the comment?
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "20.03"; # Did you read the comment?
 
 }
