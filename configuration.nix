@@ -151,15 +151,15 @@
     extraRules = ''
       # Canon CanoScan Lide 120
       ATTRS{idVendor}=="04a9", ATTRS{idProduct}=="190e", ENV{libsane_matched}="yes"
-      # Rule for the Ergodox EZ
-      SUBSYSTEM=="usb", ATTR{idVendor}=="feed", ATTR{idProduct}=="1307", GROUP="plugdev"
     '';
+
+    packages = [ (pkgs.callPackage ./ergodox-udev-rules.nix {}) ];
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.multun = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "wireshark" "scanner" "adbusers" "plugdev" "docker" ];
+    extraGroups = [ "wheel" "video" "audio" "disk" "networkmanager" "nix-config" "wireshark" "scanner" "adbusers" "docker" ];
     group = "users";
     createHome = true;
     home = "/home/multun";
