@@ -146,10 +146,20 @@
       enable = true;
       package = pkgs.i3-gaps;
     };
+
+    # desktopManager.plasma5 = {
+    #   enable = true;
+    # };
+
+    displayManager = {
+      defaultSession = "none+i3";
+      # sddm = {
+      #   enable = true;
+      # };
+    };
   };
 
-  services.xserver.displayManager.defaultSession = "none+i3";
-
+  # BEWARE: disable if i3 is enabled
   xdg.portal.enable = false;
 
   hardware.sane.enable = true;
