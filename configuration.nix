@@ -38,8 +38,10 @@
   };
 
   networking.hostName = "thinkingbus";
-  networking.wireless.enable = true;
-
+  networking.wireless = {
+    enable = true;
+    interfaces = ["wlp3s0"];
+  };
 
   # fix loading of terminus / other bitmap fonts
   fonts.fontconfig.useEmbeddedBitmaps = true;
@@ -80,6 +82,7 @@
     mtr
     font-awesome
     v4l-utils
+    pulseeffects-pw
   ]);
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -87,7 +90,6 @@
     font = "Lat2-Terminus16";
     keyMap = "fr";
   };
-
 
   time.timeZone = "Europe/Paris";
 
@@ -122,18 +124,23 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # Enable sound using pipewire
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
   # Enable i3 Desktop Environment.
   services.xserver = {
-    wacom.enable = true;
     enable = true;
+    wacom.enable = true;
     layout = "fr";
     xkbOptions = "oss";
     libinput.enable = true;
-    libinput.disableWhileTyping = true;
+    libinput.touchpad.disableWhileTyping = true;
     desktopManager.xterm.enable = false;
     windowManager.i3 = {
       enable = true;
