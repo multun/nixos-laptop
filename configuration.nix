@@ -25,11 +25,10 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.extraModulePackages = [ pkgs.linuxPackages_latest.v4l2loopback ];
-  boot.kernelModules = [ "v4l2loopback" ];
+  boot.kernelPackages = pkgs.linuxPackages;
+  boot.extraModulePackages = with config.boot.kernelPackages; [perf];
   boot.extraModprobeConfig = ''
-    options snd_hda_intel power_save=1
+    options snd_hda_intel power_save=1 i915.enable_psr=0 intel_idle.max_cstate=1
   '';
 
   powerManagement = {
