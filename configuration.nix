@@ -147,6 +147,10 @@
   xdg.portal.enable = false;
 
   hardware.sane.enable = true;
+
+  # enables suspend on empty battery / dbus battery api
+  services.upower.enable = true;
+
   services.udev = {
     extraRules = ''
       # Canon CanoScan Lide 120
