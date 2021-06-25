@@ -87,6 +87,7 @@
     font-awesome
     v4l-utils
     pulseeffects-pw
+    qjackctl
   ]);
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -135,6 +136,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = true;
   };
 
   # Enable i3 Desktop Environment.
