@@ -10,26 +10,30 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   # memtest86 is unfree :(
   nixpkgs.config.allowUnfree = true;
-  boot.loader.systemd-boot.memtest86.enable = true;
 
-  boot.initrd.luks.devices = {
-    root = {
-      device = "/dev/disk/by-uuid/553cb8ac-0b2f-4d7c-aa46-4582ac0deacf";
-      preLVM = true;
+  # Use the systemd-boot EFI boot loader.
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      systemd-boot.memtest86.enable = true;
     };
-  };
 
-  boot.kernelPackages = pkgs.linuxPackages;
-  boot.extraModulePackages = with config.boot.kernelPackages; [perf];
-  boot.extraModprobeConfig = ''
-    options snd_hda_intel power_save=1 i915.enable_psr=0 intel_idle.max_cstate=1
-  '';
+    initrd.luks.devices = {
+      root = {
+        device = "/dev/disk/by-uuid/553cb8ac-0b2f-4d7c-aa46-4582ac0deacf";
+        preLVM = true;
+      };
+    };
+
+    kernelPackages = pkgs.linuxPackages;
+    extraModulePackages = with config.boot.kernelPackages; [perf];
+    extraModprobeConfig = ''
+      options snd_hda_intel power_save=1
+    '';
+  };
 
   powerManagement = {
     enable = true;
