@@ -3,10 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
-let
-  unstable = import <nixos-unstable> { };
-in {
+{
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -53,7 +50,6 @@ in {
   };
 
   nix = {
-    package = pkgs.nixUnstable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -74,6 +70,7 @@ in {
   networking.hostName = "thinkingbus";
   networking.wireless = {
     enable = true;
+    allowAuxiliaryImperativeNetworks = true;
     interfaces = ["wlp3s0"];
   };
 
@@ -100,7 +97,7 @@ in {
   environment.systemPackages = (with pkgs; [
     git
     openssh
-    procps-ng
+    procps
     nix-prefetch-scripts
     emacs
     curl
@@ -162,7 +159,6 @@ in {
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    package = unstable.pipewire;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
